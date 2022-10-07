@@ -1,4 +1,3 @@
-from sys import flags
 from time import sleep
 import autoFindRoad
 import auto

@@ -1,3 +1,4 @@
+from re import S
 import auto
 import common
 import autoFindRoad
@@ -36,7 +37,6 @@ def autoMoveRoleToGoal(goalX,goalY, speed):
     if roleX == 0:
         common.moveFunc(common.getRandomResult())
     roleY += 150
-    print(roleX, roleY, goalX,goalY)
     if roleX == 0:
         common.moveFunc('left', 3) # 可能角色移动到最右边，向左移动
     else:
@@ -44,7 +44,6 @@ def autoMoveRoleToGoal(goalX,goalY, speed):
         distanceY = roleY - goalY - 100
         timeX = distanceX / 200
         timeY = distanceY / 300
-        print(timeX, timeY)
         if abs(timeX) > 0.1:
             timeX = (65 / speed) * timeX
             if timeX > 0:
@@ -63,7 +62,13 @@ def changePickEpic():
     common.otherKeys('5')
     time.sleep(1)
     common.otherKeys('capslock')
-    time.sleep(10)
+    time.sleep(5)
+    common.otherKeys('x')
+    time.sleep(2)
+    common.otherKeys('x')
+    time.sleep(2)
+    common.otherKeys('x')
+    time.sleep(1)
     common.otherKeys('5')
      
 #   将角色移动到y轴中间
@@ -71,9 +76,30 @@ def moveRoleToYCenter(speed = 122, cropPosition = [0,0,800,600]):
     y_distance = auto.getRoleAndMiddle(cropPosition)
     y_distance = y_distance * (122 / speed)
     y_distance /= 320
-    print(y_distance)
     if abs(y_distance) >= 0.03:
         if y_distance < 0:
             common.moveFunc('top', abs(y_distance))
         else:
             common.moveFunc('bottom', abs(y_distance))
+
+def nextAndClear(slow = False):
+    time.sleep(3)
+    common.otherKeys('`')
+    common.otherKeys('x')
+    common.otherKeys('x')
+    common.otherKeys('x')
+    time.sleep(3.5)
+    common.otherKeys('esc')
+    time.sleep(2)
+    common.otherKeys('esc')
+    time.sleep(1)
+    common.otherKeys('R_ctrl')
+    time.sleep(4)
+    if autoFindRoad.checkFatigueValueisClear() is True:
+        common.otherKeys('f12')
+        time.sleep(5)
+        if slow == True:
+            common.moveFunc('left', 1)
+        autoFindRoad.sealGoogsAndFix()
+        return True
+    return False

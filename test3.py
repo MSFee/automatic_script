@@ -26,7 +26,6 @@ def autoAcctch():
     if x != 0:
       keyBoy = item.split('.')
       common.otherKeys(keyBoy[0])
-      print(keyBoy[0])
       break
 while True:
   sleep(1)

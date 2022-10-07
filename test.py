@@ -16,7 +16,6 @@ def testF(name):
         img_,x,y = auto.search_returnPoint(img,monster4,monster4_size, 0.9)
         if x is None:
             continue
-        print('命中第' + str(i+1) + '张图片')
         return x,y + 130
     # saveJpg([x + 40, y, x + 80, y + 16])
     return None, None

@@ -62,7 +62,6 @@ def start():
         common.otherKeys('a')
         sleep(4)
         common.moveFunc('top', 0.2)
-        common.run(0.4, 'left')
         sleep(0.5)
         while (auto.judgeMap('3-l') or auto.judgeMap('3-l2')) is False:
             common.moveFunc('left', 0.1)
@@ -78,10 +77,6 @@ def start():
         normal.moveRoleToYCenter(90, [400,0, 800, 600])
         common.otherKeys('s')
         sleep(2)
-        while (auto.judgeMap('4-l') or auto.judgeMap('4-l2')) is False:
-            common.moveFunc('left', 0.1)
-            common.otherKeys('q')
-            sleep(4)
         autoFindRoad.findDoorPlus(90, False, True)
         if auto.checkHasEpic() is True:
             common.moveFunc('bottom', 0.5)

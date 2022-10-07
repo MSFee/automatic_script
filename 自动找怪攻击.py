@@ -24,9 +24,7 @@ def func():
 while True:
     time.sleep(1)
     x,y = func()
-    print(x,y)
     if x is None:
-        print(x)
         autoFindRoad.findRolePositionAndMoveCenter()
         continue
     normal.autoMoveRoleToGoal(x, y, 115)

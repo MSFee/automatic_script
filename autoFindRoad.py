@@ -27,7 +27,6 @@ def findDoor(speed = 65, isNeedColumn = True, isNeedToLeft = True, isTaskDoor = 
         if isNeedColumn is False:
             return
         if abs(timeY) > 0.1:
-            print(timeY)
             # timeY = (65 / speed) * timeY
             if timeY > 0:
                 common.moveFunc('bottom', timeY)
@@ -117,7 +116,6 @@ def findRolePositionAndMoveCenter(count = 0):
 def findTaskDoor(speed = 65):
     common.otherKeys('.')
     x,y = auto.checkHasTask()
-    print(x,y)
     if x == 0:
         findRolePositionAndMoveCenter()
     flag = False
@@ -194,9 +192,9 @@ def sealGoogsAndFix():
     common.otherKeys('space')
     sleep(1)
 
-    # 维修装备
-    common.otherKeys('s')
-    sleep(1)
-    common.otherKeys('space')
+    # # 维修装备
+    # common.otherKeys('s')
+    # sleep(1)
+    # common.otherKeys('space')
 
     common.otherKeys('esc')

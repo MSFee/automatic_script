@@ -136,7 +136,7 @@ def start():
                 common.moveFunc('top', 0.4)
         common.moveFunc('top', 0.7)
         common.run(0.35, 'left')
-        common.otherKeys('f')
+        common.otherKeys('d')
         sleep(4.5)
         common.otherKeys('`')
         sleep(3)
