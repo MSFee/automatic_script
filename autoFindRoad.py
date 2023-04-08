@@ -2,12 +2,24 @@ from time import sleep
 from tkinter import Y
 import auto
 import common
-def findDoor(speed = 65, isNeedColumn = True, isNeedToLeft = True, isTaskDoor = False):
+
+#   将角色移动到y轴中间
+def moveRoleToYCenter(speed = 122, cropPosition = [0,0,1067,600]):
+    y_distance = auto.getRoleAndMiddle(cropPosition)
+    y_distance = y_distance * (122 / speed)
+    y_distance /= 320
+    if abs(y_distance) >= 0.02:
+        if y_distance < 0:
+            common.moveFunc('top', abs(y_distance))
+        else:
+            common.moveFunc('bottom', abs(y_distance))
+
+def findDoor(speed = 65, isNeedColumn = True, isNeedToLeft = True, isTaskDoor = False, cropPosition = auto.CROPPOSITION):
     total = 1
     flag = False
     while total <= 10:
         sleep(1)
-        timeX, timeY = auto.getRoleAndDoor(isTaskDoor)
+        timeX, timeY = auto.getRoleAndDoor(isTaskDoor, 0, cropPosition)
         if timeX is False:
             common.ranDomMoveRole() 
             total += 1
@@ -31,7 +43,7 @@ def findDoor(speed = 65, isNeedColumn = True, isNeedToLeft = True, isTaskDoor = 
             if timeY > 0:
                 common.moveFunc('bottom', timeY)
             else:
-                common.moveFunc('top', abs(timeY))
+                common.moveFunc('top', abs(timeY) )
         break
 def findDoorPlus(speed = 65, limitLeft = False, limitTop = False):
     total = 1
@@ -87,7 +99,7 @@ def findDoorPlus(speed = 65, limitLeft = False, limitTop = False):
             if timeY > 0:
                 common.moveFunc('bottom', timeY)
             else:
-                common.moveFunc('top', abs(timeY))
+                common.moveFunc('top', abs(timeY) + 0.2)
         break
 # 寻找角色位置，将角色位置移动到地图正中间
 def findRolePositionAndMoveCenter(count = 0):
@@ -175,7 +187,7 @@ def sealGoogsAndFix():
     common.moveFunc('top', 2)
     
     while auto.checkHasMachine() is False:
-        common.moveFunc('right', 0.02)
+        common.moveFunc('left', 0.02)
         sleep(1.5)
 
     # 出售装备

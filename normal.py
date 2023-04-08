@@ -70,17 +70,6 @@ def changePickEpic():
     common.otherKeys('x')
     time.sleep(1)
     common.otherKeys('5')
-     
-#   将角色移动到y轴中间
-def moveRoleToYCenter(speed = 122, cropPosition = [0,0,800,600]):
-    y_distance = auto.getRoleAndMiddle(cropPosition)
-    y_distance = y_distance * (122 / speed)
-    y_distance /= 320
-    if abs(y_distance) >= 0.03:
-        if y_distance < 0:
-            common.moveFunc('top', abs(y_distance))
-        else:
-            common.moveFunc('bottom', abs(y_distance))
 
 def nextAndClear(slow = False):
     time.sleep(3)

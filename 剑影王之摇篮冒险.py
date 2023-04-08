@@ -1,4 +1,3 @@
-from cmath import e
 from time import sleep
 import common
 import normal
@@ -104,7 +103,7 @@ def start():
             normal.changePickEpic()
             common.moveFunc('top', 0.4)
         sleep(0.5)
-        common.moveFunc('top', 1)
+        common.moveFunc('top', 1.2)
         common.moveFunc('right', 0.01)
         common.otherKeys('g')
         sleep(6)
@@ -133,8 +132,8 @@ def start():
             if auto.checkHasEpic() is True:
                 common.moveFunc('bottom', 0.4)
                 normal.changePickEpic()
-                common.moveFunc('top', 0.4)
-        common.moveFunc('top', 0.7)
+                common.moveFunc('top', 0.7)
+        common.moveFunc('top', 1)
         common.run(0.35, 'left')
         common.otherKeys('d')
         sleep(4.5)

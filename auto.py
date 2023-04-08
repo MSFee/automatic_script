@@ -3,8 +3,10 @@ from time import sleep
 import cv2
 from PIL import ImageGrab
 import numpy as np
-import common
 scale = 1
+
+CROPPOSITION = [0,0,1067,600]
+
 
 def getImgInfo(img_address):
     template = cv2.imread(img_address)
@@ -12,9 +14,12 @@ def getImgInfo(img_address):
     template_size= template.shape[:2]
     return template, template_size
 
-template,template_size = getImgInfo('./pic/role.jpg')
+template,template_size = getImgInfo('./pic/role2.jpg')
 roleLeft,roleLeft_size = getImgInfo('./pic/role-left.jpg')
 roleRight,roleRight_size = getImgInfo('./pic/role-right.jpg')
+
+
+
 door,door_size = getImgInfo('./pic/door.jpg')
 close_door,close_door_size = getImgInfo('./pic/close_door.jpg')
 taskDoor,taskDoor_size = getImgInfo('./pic/emergency_door.jpg')
@@ -30,7 +35,7 @@ def getImg1AndImg2(address1, address2, threshold = 0.6):
 
 
 # 截图方法
-def saveAndCropFunc(address = 'dnf', cropPosition = [0,0,800,600]):
+def saveAndCropFunc(address = 'dnf', cropPosition = CROPPOSITION):
     img = ImageGrab.grab()
     x,y,crop_x,crop_y = cropPosition
     region = img.crop((x,y,crop_x,crop_y))
@@ -53,8 +58,8 @@ def search_returnPoint(img,template,template_size, threshold = 0.6):
         return None,None,None
     return img,point[0]+ template_size[1] /2,point[1]
 
-def getRoleAndDoor(isTaskDoor = False, flag = 0):
-    saveAndCropFunc()
+def getRoleAndDoor(isTaskDoor = False, flag = 0, cropPosition = CROPPOSITION):
+    saveAndCropFunc('dnf', cropPosition)
     img = cv2.imread('./dnf.jpg')
     img = cv2.resize(img,(0,0),fx=scale,fy=scale)
     try:
@@ -66,9 +71,9 @@ def getRoleAndDoor(isTaskDoor = False, flag = 0):
             img_,x_,y_ = search_returnPoint(img,template,template_size)
         if x_ is None:
             if flag == 0:
-               return getRoleAndDoor(isTaskDoor, 1)
+               return getRoleAndDoor(isTaskDoor, 1, cropPosition)
             elif flag == 1:
-               return getRoleAndDoor(isTaskDoor, 2)
+               return getRoleAndDoor(isTaskDoor, 2, cropPosition)
             else:
                 return False, False
         if isTaskDoor is True:
@@ -136,9 +141,10 @@ def judgeMap(mapName, isPre = False):
 # 查找当前地图是否爆出史诗装备
 def checkHasEpic():
     saveAndCropFunc('dnf')
-    monster4,monster4_size = getImgInfo('./others_pic/epic.jpg')
+    epic ,epic_size = getImgInfo('./others_pic/epic.jpg')
     img,img_size = getImgInfo('./dnf.jpg')
-    img_,x,y = search_returnPoint(img,monster4,monster4_size, 0.8)
+    img_,x,y = search_returnPoint(img, epic, epic_size, 0.5)
+    print(x)
     if x is None:
         return False
     return True

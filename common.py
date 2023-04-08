@@ -59,7 +59,7 @@ def moveFunc2(direction, times = 0):
 def otherKeys(key):
     if key == 'v':
         pydirectinput.press('v')
-    if key == 'z':
+    elif key == 'z':
         pydirectinput.press('z')
     elif key == 'x':
         pydirectinput.press('x')
@@ -115,6 +115,8 @@ def otherKeys(key):
         pydirectinput.press('left')
     elif key == 'right':
         pydirectinput.press('right')
+    else:
+        pydirectinput.press(key)
 
 
 

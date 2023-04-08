@@ -4,7 +4,6 @@ import pydirectinput
 from time import sleep
 import subprocess
 import os
-import random
 pydirectinput.FAILSAFE = False
 auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
 
@@ -350,72 +349,81 @@ def toBossAndAttch(position):
     click(1151, 142)
     sleep(1)
     click(1258, 362)
-    sleep(2)
+    autoScreensHot()
+    sleep(210)
+
+
+def checkBossMap(bossIndex):
+    # 放逐魔域5层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
+    bossFive = [[583, 278], [512, 319], [479, 383]]
+    # 放逐魔域6层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
+    bossSix = [[547, 556], [360, 444], [414, 531]]
+    # 放逐魔域11层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
+    bossEle = [[397, 500], [709, 449], [896, 393]]
     auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
-    me_x, me_y = auto.getImg1AndImg2(
-        "./chuanqi/main.jpg", "./chuanqi/boss/bossIsMe.jpg", 0.9)
-    if me_x != 0:
-        autoScreensHot()
-        sleep(210)
-    else:
-        autoScreensHot()
-
-# 放逐魔域5层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
-bossFive = [[583, 278], [512, 319], [479, 383]]
-# 放逐魔域6层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
-bossSix = [[547, 556], [360, 444], [414, 531]]
-# 放逐魔域11层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
-bossEle = [[397, 500], [709, 449], [896, 393]]
-
-
-def findBossMap(boss, bossIndex):
+    # 放逐魔域5层
     xBoss, yBoss = auto.getImg1AndImg2(
-        "./chuanqi/main.jpg", f"./chuanqi/boss/{boss}.jpg", 0.97)
+        "./chuanqi/main.jpg", "./chuanqi/boss/boss.jpg", 0.97)
     if xBoss != 0:
         click(xBoss, yBoss + 25)
         position = bossFive[bossIndex]
         toBossAndAttch(position)
         return True
+
+    # 放逐魔域6层
+    xBoss1, yBoss1 = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss/boss1.jpg", 0.97)
+    if xBoss1 != 0:
+        click(xBoss1, yBoss1 + 25)
+        position = bossSix[bossIndex]
+        toBossAndAttch(position)
+        return True
+
+    # 放逐魔域11层
+    xBoss2, yBoss2 = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss/boss2.jpg", 0.97)
+    if xBoss2 != 0:
+        click(xBoss2, yBoss2 + 25)
+        position = bossEle[bossIndex]
+        toBossAndAttch(position)
+        return True
     return False
-
-
-def checkBossMap(bossIndex):
-    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
-    # 放逐魔域5层 放逐魔域6层 放逐魔域11层
-    lst = ["boss", "boss1", "boss2"]
-    random.shuffle(lst)
-    for l in lst:
-        result = findBossMap(l, bossIndex)
-        if result is True:
-            return True
-    return False
-
-
-def clickBossTab(position, index):
-    # 斗笠BOSS
-    click(position[0], position[1])
-    sleep(1)
-    result = checkBossMap(index)
-    if result:
-        toBoss()
-        return
-
 
 def toBoss():
     click(1144, 96)
     sleep(1)
     click(1150, 305)
     sleep(1)
-    funcs = [[[664, 192], 0], [[421, 192], 1], [[544, 192], 2]]
-    random.shuffle(funcs)
-    for f in funcs:
-        clickBossTab(f[0], f[1])
+
+    # 斗笠BOSS
+    click(664, 192)
+    sleep(1)
+    result = checkBossMap(0)
+    if result:
+       toBoss()
+       return
+
+    # 特戒
+    click(421, 192)
+    sleep(1)
+    result = checkBossMap(1)
+    if result:
+       toBoss()
+       return
+
+    # 盾牌
+    click(544, 192)
+    sleep(1)
+    result = checkBossMap(2)
+    if result:
+       toBoss()
+       return
     sleep(1)
     click(1150, 142)
     sleep(1)
 
 
-def start(attchBoss=False):
+def start(attchBoss = False):
     count = 1
     while True:
         checkGameWindow()
@@ -436,10 +444,8 @@ def start(attchBoss=False):
         count = count + 1
 
 
-# try:
-#     start(True)
-# except:
-#     autoScreensHot(True)
-#     start()
-
-toBoss()
+try:
+    start(True)
+except:
+    autoScreensHot(True)
+    start()
