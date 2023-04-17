@@ -5,7 +5,7 @@ from time import sleep
 import subprocess
 import os
 pydirectinput.FAILSAFE = False
-auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
+auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
 
 
 def click(x, y):
@@ -38,7 +38,7 @@ def connect_wifi(is5G=True):
 
 
 def clickPackage():
-    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
+    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
     x, y = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/package.jpg")
     pydirectinput.moveTo(int(x), int(y) + 8)
     pydirectinput.click()
@@ -53,7 +53,7 @@ def openQuicklyBack():
         pydirectinput.click()
     else:
         clickPackage()
-        auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
+        auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
         sleep(2)
         x1, y1 = auto.getImg1AndImg2(
             "./chuanqi/main.jpg", "./chuanqi/back.jpg")
@@ -61,7 +61,7 @@ def openQuicklyBack():
 
 
 def clickQuicklyBack(count=0):
-    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
+    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
     x_back, y_back = auto.getImg1AndImg2(
         "./chuanqi/main.jpg", "./chuanqi/quicklyBack.jpg")
     if x_back != 0:
@@ -98,9 +98,15 @@ def goMonster():
     pydirectinput.moveTo(295, 300, 2)
     sleep(2)
     pydirectinput.mouseUp()
-    pydirectinput.click(300, 667)
-    # pydirectinput.click(1024, 474)  # 轮回魔域
-    pydirectinput.click(1024, 532)
+    pydirectinput.click(290, 665)
+    sleep(1)
+    pydirectinput.mouseDown()
+    pydirectinput.moveTo(295, 300, 2)
+    sleep(2)
+    pydirectinput.mouseUp()
+    pydirectinput.click(300, 563)
+    pydirectinput.click(1015, 474)
+    # pydirectinput.click(1015, 428)  # 霍乱
     sleep(3)
     pydirectinput.click(945, 648)
     sleep(2)
@@ -108,12 +114,12 @@ def goMonster():
 
 
 def checkIsDead():
-    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
+    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
     x, y = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/isDead.jpg")
     if x != 0:
         click(x, y + 8)
         sleep(2)
-        auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
+        auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
         x, y = auto.getImg1AndImg2(
             "./chuanqi/main.jpg", "./chuanqi/package.jpg")
         x_back, y_back = auto.getImg1AndImg2(
@@ -124,7 +130,7 @@ def checkIsDead():
 
 
 def checkArea():
-    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
+    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
     x_monster, y3 = auto.getImg1AndImg2(
         "./chuanqi/main.jpg", "./chuanqi/monster.jpg", 0.9)
     x_monster1, y3 = auto.getImg1AndImg2(
@@ -143,7 +149,7 @@ def checkArea():
 
 def resolve():
     clickPackage()
-    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
+    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
     x, y = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/compile.jpg")
     if x == 0 or y == 0:
         pydirectinput.rightClick(1338, 360)
@@ -236,7 +242,7 @@ def getCanLogin():
 
 
 def checkIsOutLogin():
-    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
+    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
     x, y = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/outlogin.jpg")
     if x != 0:
         getCanLogin()
@@ -341,26 +347,32 @@ def toBossAndAttch(position):
     sleep(1)
     # 点击右上角地图
     click(1304, 145)
-    sleep(1)
+    sleep(3)
     # 700级斗笠boss地图坐标
     click(position[0], position[1])
-    sleep(18)
+    sleep(15)
     # 关闭地图
     click(1151, 142)
     sleep(1)
+    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
+    x, y = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/fight.jpg")
+    if x == 0:
+        x_close, y_close = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/closeBtn.jpg", 0.9)
+        click(x_close, y_close)
+    sleep(1)
     click(1258, 362)
     autoScreensHot()
-    sleep(210)
+    sleep(280)
 
 
 def checkBossMap(bossIndex):
-    # 放逐魔域5层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
-    bossFive = [[583, 278], [512, 319], [479, 383]]
+    # 放逐魔域7层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
+    bossFive = [[592, 352], [816, 458], [479, 387]]
     # 放逐魔域6层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
-    bossSix = [[547, 556], [360, 444], [414, 531]]
-    # 放逐魔域11层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
-    bossEle = [[397, 500], [709, 449], [896, 393]]
-    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1376, 818])
+    bossSix = [[589, 280], [516, 324], [483, 391]]
+    # 混乱神域14层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
+    bossEle = [[398, 498], [710, 446], [896, 391]]
+    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
     # 放逐魔域5层
     xBoss, yBoss = auto.getImg1AndImg2(
         "./chuanqi/main.jpg", "./chuanqi/boss/boss.jpg", 0.97)
@@ -389,6 +401,7 @@ def checkBossMap(bossIndex):
         return True
     return False
 
+
 def toBoss():
     click(1144, 96)
     sleep(1)
@@ -400,41 +413,55 @@ def toBoss():
     sleep(1)
     result = checkBossMap(0)
     if result:
-       toBoss()
-       return
+        toBoss()
+        return
 
     # 特戒
     click(421, 192)
     sleep(1)
     result = checkBossMap(1)
     if result:
-       toBoss()
-       return
+        toBoss()
+        return
 
     # 盾牌
     click(544, 192)
     sleep(1)
     result = checkBossMap(2)
     if result:
-       toBoss()
-       return
+        toBoss()
+        return
     sleep(1)
     click(1150, 142)
     sleep(1)
 
 
-def start(attchBoss = False):
+def checkIsError():
+    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
+    x, y = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/error.jpg")
+    if x != 0:
+        click(1085, 256)
+
+def isBoss_800():
+    auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
+    x, y = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/boss800.jpg", 0.9)
+    if x != 0:
+        click(551, 682)
+
+def start(attchBoss=False):
     count = 1
     while True:
         checkGameWindow()
         checkIsOutLogin()
-        print('自动回收第' + str(count) + '次')
         checkIsDead()
+        # isBoss_800()
+        if count % 10 == 0:
+            checkIsError()
         if attchBoss:
             toBoss()
         checkArea()
         sleep(3)
-        if count % 5 == 0:
+        if count % 200 == 0:
             clickQuicklyBack()
             # autoScreensHot()
         if count % 20 == 0:
@@ -444,8 +471,9 @@ def start(attchBoss = False):
         count = count + 1
 
 
-try:
-    start(True)
-except:
-    autoScreensHot(True)
-    start()
+start(True)
+
+# try:
+# except:
+#     autoScreensHot(True)
+#     start()
