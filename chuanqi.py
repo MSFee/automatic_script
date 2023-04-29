@@ -1,10 +1,8 @@
+import chuanqiUtils
 import startgGame
 import auto
 import pydirectinput
 from time import sleep
-import subprocess
-import os
-import datetime
 pydirectinput.FAILSAFE = False
 auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
 
@@ -12,30 +10,6 @@ auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
 def click(x, y):
     if x != 0:
         pydirectinput.click(int(x), int(y))
-
-
-def check_network_status():
-    try:
-        # 判断当前电脑是否联网
-        subprocess.check_output(
-            ['ping', 'www.baidu.com', '-n', '1', '-w', '5000'])
-        return True
-    except:
-        return False
-
-
-def connect_wifi(is5G=True):
-    # # 扫描可用wifi列表
-    # wifi_list = subprocess.check_output(['netsh', 'wlan', 'show', 'network'], shell=True, timeout=15, stderr=subprocess.STDOUT, encoding='gbk').split('\n')
-    # # 查找指定名称的wifi
-    # mr1002_5G = [line.split(':')[1][1:-1] for line in wifi_list if 'mr1002-5G' in line]
-    # if len(mr1002_5G) > 0:
-    #     # 连接指定的wifi
-
-    if is5G:
-        os.system('netsh wlan connect name="{}"'.format('mr1002-5G'))
-    else:
-        os.system('netsh wlan connect name="{}"'.format('mr1002'))
 
 
 def clickPackage():
@@ -78,39 +52,29 @@ def clickQuicklyBack(count=0):
         clickQuicklyBack(count + 1)
 
 
+def findMonster(count):
+    while count != 0:
+        count = count - 1
+        pydirectinput.moveTo(295, 663)
+        pydirectinput.mouseDown()
+        sleep(0.5)
+        pydirectinput.moveTo(295, 300, 2)
+        sleep(0.5)
+        pydirectinput.mouseUp()
+
+
 def goMonster():
     sleep(2)
-    pydirectinput.moveTo(1144, 96)
-    pydirectinput.click()
-    pydirectinput.moveTo(295, 663)
-    pydirectinput.mouseDown()
-    pydirectinput.moveTo(295, 300, 2)
+    click(1144, 96)
     sleep(2)
-    pydirectinput.mouseUp()
-    pydirectinput.click(290, 665)
-    sleep(1)
-    pydirectinput.mouseDown()
-    pydirectinput.moveTo(295, 300, 2)
-    sleep(2)
-    pydirectinput.mouseUp()
-    pydirectinput.click(290, 665)
-    sleep(1)
-    pydirectinput.mouseDown()
-    pydirectinput.moveTo(295, 300, 2)
-    sleep(2)
-    pydirectinput.mouseUp()
-    pydirectinput.click(290, 665)
+    findMonster(6)
     sleep(1)
     # 神族地牢
-    click(310, 401)
-    pydirectinput.click(1015, 474)
-    # pydirectinput.mouseDown()
-    # pydirectinput.moveTo(295, 300, 2)
-    # sleep(2)
-    # pydirectinput.mouseUp()
-    # pydirectinput.click(300, 563)
+    # click(310, 401)
     # pydirectinput.click(1015, 474)
-    # pydirectinput.click(1015, 428)  # 霍乱
+    pydirectinput.click(293, 593)
+    # pydirectinput.click(1015, 474)
+    pydirectinput.click(1027, 430)  # 血龙秘境
     sleep(2)
     pydirectinput.click(945, 648)
     sleep(2)
@@ -186,49 +150,16 @@ def checkHasEquip():
         pydirectinput.moveTo(int(x), int(y) + 8)
         pydirectinput.click()
 
-
-def clickWeChantLogo():
-    leftPostion = 1931
-    topPosition = 1392
-    auto.saveAndCropFunc("./chuanqi/wechatMain",
-                         [leftPostion, topPosition, 2533, 1439])
+def needLogin():
+    auto.saveAndCropFunc("./chuanqi/wechat", [0, 950, 550, 1390])
     x, y = auto.getImg1AndImg2(
-        "./chuanqi/wechatMain.jpg", "./chuanqi/wechatLogo.jpg", 0.8)
+           "./chuanqi/wechat.jpg", "./chuanqi/wechatLogin.jpg", 0.8)
     if x != 0:
-        click(leftPostion + x, topPosition + y)
-    else:
-        pydirectinput.click(2327, 1414)
-
-
-def outGameAndLoginGame():
-    sleep(1)
-    pydirectinput.click(1346, 21)
-    clickWeChantLogo()
-    sleep(2)
-    hwnd, left, top, width, height = startgGame.getWindowAndSetMoveRightBottom(
-        "微信", "WeChatMainWndForPC")
-    auto.saveAndCropFunc("./chuanqi/wechatMain",
-                         [left, top, left + width, top + height])
-    x, y = auto.getImg1AndImg2(
-        "./chuanqi/wechatMain.jpg", "./chuanqi/gameBtn.jpg")
-    click(left + x, top + y)
-    sleep(1)
-    auto.saveAndCropFunc("./chuanqi/wechatMain",
-                         [left, top, left + width, top + height])
-    x_logo, y_logo = auto.getImg1AndImg2(
-        "./chuanqi/wechatMain.jpg", "./chuanqi/gameLogo.jpg", 0.8)
-    click(left + x_logo, top + y_logo)
-    sleep(3)
-    pydirectinput.click(1347, 863)
-    sleep(2)
-    pydirectinput.click(1378, 873)
-    sleep(2)
-    pydirectinput.click(1271, 932)
-    sleep(5)
-    # pydirectinput.click(2542, 763)
-    startgGame.closeWindow(hwnd)
-    sleep(5)
-
+        print('重新登陆')
+        deleteMsg()
+        chuanqiUtils.outGameAndLoginGame()
+        startgGame.getWindow("雷霆传说")
+        autoScreensHot()
 
 def getCanLogin():
     while True:
@@ -238,7 +169,7 @@ def getCanLogin():
         if x != 0:
             print('开始登陆')
             deleteMsg()
-            outGameAndLoginGame()
+            chuanqiUtils.outGameAndLoginGame()
             startgGame.getWindow("雷霆传说")
             autoScreensHot()
             break
@@ -254,7 +185,7 @@ def checkIsOutLogin():
     x1, y = auto.getImg1AndImg2(
         "./chuanqi/main.jpg", "./chuanqi/notNetwork.jpg")
     if x1 != 0:
-        outGameAndLoginGame()
+        chuanqiUtils.outGameAndLoginGame()
 
 # 删除信息
 
@@ -282,6 +213,7 @@ def deleteMsg(imgName='wechatLogin'):
 
 # 自动截图并发送微信
 
+
 def autoScreensHot(isFull=False):
     pydirectinput.keyDown('alt')
     pydirectinput.press('a')
@@ -306,47 +238,26 @@ def autoScreensHot(isFull=False):
     pydirectinput.press('enter')
     sleep(1)
 
-# 检查电脑网络链接
-
-
-def checkISNotNetWork(isNeedLogin=False, is5G=True, count=0):
-    if not check_network_status():
-        if count > 10:
-            sleep(300)
-        connect_wifi(is5G)
-        sleep(10)
-        is5G = not is5G
-        checkISNotNetWork(True, is5G, count + 1)
-        return
-    elif isNeedLogin:
-        print('开始登陆')
-        outGameAndLoginGame()
-        sleep(5)
-        startgGame.getWindow("雷霆传说")
-        return
-    else:
-        print('开始登陆')
-        outGameAndLoginGame()
-        sleep(5)
-        startgGame.getWindow("雷霆传说")
-
 
 def checkGameWindow(isClose=False):
     try:
         hwnd, width, height = startgGame.getWindow("雷霆传说")
+        chuanqiUtils.checkGameisError()
         if isClose:
             startgGame.closeWindow(hwnd)
             sleep(5)
-            checkISNotNetWork()
+            chuanqiUtils.checkISNotNetWork()
     except:
-        checkISNotNetWork()
+        chuanqiUtils.checkISNotNetWork()
 
 
-def toBossAndAttch(position):
+def toBossAndAttch(position, time=80):
     sleep(3)
     # 点击进入地图按钮
     click(946, 650)
     click(946, 650)
+    sleep(1)
+    checkIsError()
     sleep(1)
     # 点击右上角地图
     click(1304, 145)
@@ -360,59 +271,124 @@ def toBossAndAttch(position):
     auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
     x, y = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/fight.jpg")
     if x == 0:
-        x_close, y_close = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/closeBtn.jpg", 0.9)
+        x_close, y_close = auto.getImg1AndImg2(
+            "./chuanqi/main.jpg", "./chuanqi/closeBtn.jpg", 0.9)
         click(x_close, y_close)
     sleep(1)
     click(1258, 362)
-    sleep(160)
+    sleep(2)
+    autoScreensHot()
+    sleep(time)
 
 
-def checkBossMap(bossIndex):
-    # 放逐魔域7层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
-    bossFive = [[592, 352], [816, 458], [479, 387]]
-    # 放逐魔域6层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
-    bossSix = [[589, 280], [516, 324], [483, 391]]
-    # 混乱神域14层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
-    bossEle = [[398, 498], [710, 446], [896, 391]]
-    # # 混乱神域14层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
-    # bossFifthteen = [[398, 498], [710, 446], [896, 391]]
+def attch800Boss(bossIndex):
+    boss6 = [[585, 278], [], [479, 391]]
+    boss7 = [[584, 354], [], [479, 390]]
+    boss8 = [[710, 510], [], [512, 325]]
+    boss14 = [[398, 500], [], [897, 393]]
+    boss17 = [[736, 651], [], [432, 632]]
+    xBoss, yBoss = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss800Area/6.jpg", 0.97)
+    if xBoss != 0:
+        click(xBoss, yBoss + 25)
+        position = boss6[bossIndex]
+        toBossAndAttch(position)
+        return True
+
+    xBoss, yBoss = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss800Area/7.jpg", 0.97)
+    if xBoss != 0:
+        click(xBoss, yBoss + 25)
+        position = boss7[bossIndex]
+        toBossAndAttch(position)
+        return True
+
+    xBoss, yBoss = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss800Area/8.jpg", 0.97)
+    if xBoss != 0:
+        click(xBoss, yBoss + 25)
+        position = boss8[bossIndex]
+        toBossAndAttch(position)
+        return True
+
+    xBoss, yBoss = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss800Area/14.jpg", 0.97)
+    if xBoss != 0:
+        click(xBoss, yBoss + 25)
+        position = boss14[bossIndex]
+        toBossAndAttch(position)
+        return True
+
+    xBoss1, yBoss1 = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss800Area/15.jpg", 0.97)
+    if xBoss1 != 0:
+        click(xBoss1, yBoss1 + 25)
+        position = boss14[bossIndex]
+        toBossAndAttch(position)
+        return True
+
+    xBoss, yBoss = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss800Area/17.jpg", 0.97)
+    if xBoss != 0:
+        click(xBoss, yBoss + 25)
+        position = boss17[bossIndex]
+        toBossAndAttch(position)
+        return True
+
+    return False
+
+
+def checkBossMap(bossIndex, is900= False):
+    # 850级
+    # 混乱神域17层 斗笠boss坐标 特戒boss坐标 盾牌boss坐标
+    bossFive = [[400, 500], [711, 454], [900, 397]]
+    # 混乱神域18层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
+    bossSix = [[507, 448], [484, 335], [734, 345]]
+    # 混乱神域19层，斗笠boss坐标 特戒boss坐标 盾牌boss坐标
+    bossNice = [[739, 652], [581, 588], [434, 633]]
+
+    bossNight = [[812, 362], [787, 563], [821, 465]]
+
     auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
-    # 放逐魔域5层
+
+    if bossIndex != 1 and is900 == False:
+        return attch800Boss(bossIndex)
+
+    xBoss3, yBoss3 = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss/boss3.jpg", 0.97)
+    if xBoss3 != 0:
+        click(xBoss3, yBoss3 + 25)
+        position = bossNight[bossIndex]
+        toBossAndAttch(position, 850)
+        return True
+
+
     xBoss, yBoss = auto.getImg1AndImg2(
         "./chuanqi/main.jpg", "./chuanqi/boss/boss.jpg", 0.97)
     if xBoss != 0:
         click(xBoss, yBoss + 25)
         position = bossFive[bossIndex]
-        toBossAndAttch(position)
+        toBossAndAttch(position, 850)
         return True
 
-    # 放逐魔域6层
     xBoss1, yBoss1 = auto.getImg1AndImg2(
         "./chuanqi/main.jpg", "./chuanqi/boss/boss1.jpg", 0.97)
     if xBoss1 != 0:
         click(xBoss1, yBoss1 + 25)
         position = bossSix[bossIndex]
-        toBossAndAttch(position)
+        toBossAndAttch(position, 850)
         return True
 
-    # 放逐魔域14层
     xBoss2, yBoss2 = auto.getImg1AndImg2(
         "./chuanqi/main.jpg", "./chuanqi/boss/boss2.jpg", 0.97)
     if xBoss2 != 0:
         click(xBoss2, yBoss2 + 25)
-        position = bossEle[bossIndex]
-        toBossAndAttch(position)
+        position = bossNice[bossIndex]
+        toBossAndAttch(position, 850)
         return True
-    
-    # 放逐魔域15层
-    xBoss3, yBoss3 = auto.getImg1AndImg2(
-        "./chuanqi/main.jpg", "./chuanqi/boss/boss3.jpg", 0.97)
-    if xBoss3 != 0:
-        click(xBoss3, yBoss3 + 25)
-        position = bossEle[bossIndex]
-        toBossAndAttch(position)
-        return True
+
     return False
+
 
 def toLuckyBoss():
     click(1144, 96)
@@ -422,12 +398,15 @@ def toLuckyBoss():
     auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
     xBoss1, yBoss1 = auto.getImg1AndImg2(
         "./chuanqi/main.jpg", "./chuanqi/boss/luckBoss.jpg", 0.97)
-    if xBoss1 != 0:
+    xHasBoss, yHasBoss = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss/hasLuckBossCount.jpg", 0.99)
+    if xBoss1 != 0 and xHasBoss == 0:
         return True
     else:
         click(1151, 143)
         sleep(1)
         return False
+
 
 def toBoss():
     click(1144, 96)
@@ -438,23 +417,41 @@ def toBoss():
     # 斗笠BOSS
     click(664, 192)
     sleep(1)
-    result = checkBossMap(0)
+    result = checkBossMap(0, True)
     if result:
         toBoss()
         return
 
-    # 特戒
-    click(421, 192)
-    sleep(1)
-    result = checkBossMap(1)
-    if result:
-        toBoss()
-        return
+    # sleep(1)
+    # click(377, 398)
+    # sleep(1)
+    # # 斗笠BOSS 900
+    # result = checkBossMap(0, True)
+    # if result:
+    #     toBoss()
+    #     return
 
     # 盾牌
     click(544, 192)
     sleep(1)
-    result = checkBossMap(2)
+    result = checkBossMap(2, True)
+    if result:
+        toBoss()
+        return
+
+    # sleep(1)
+    # click(377, 398)
+    # sleep(1)
+    # # 盾牌BOSS 900
+    # result = checkBossMap(2, True)
+    # if result:
+    #     toBoss()
+    #     return
+
+    # 特戒
+    click(421, 192)
+    sleep(1)
+    result = checkBossMap(1, True)
     if result:
         toBoss()
         return
@@ -469,37 +466,26 @@ def checkIsError():
     if x != 0:
         click(1085, 256)
 
+
 def isBoss_800():
     auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
-    x, y = auto.getImg1AndImg2("./chuanqi/main.jpg", "./chuanqi/boss800.jpg", 0.9)
+    x, y = auto.getImg1AndImg2(
+        "./chuanqi/main.jpg", "./chuanqi/boss800.jpg", 0.9)
     if x != 0:
         click(551, 682)
 
-def is_past_midnight():
-    now = datetime.datetime.now()  # 获取当前时间
-    midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)  # 获取今天的凌晨时间
-    end_of_day = midnight + datetime.timedelta(days=1) - datetime.timedelta(seconds=1)  # 获取今天的结束时间
-
-    if now >= end_of_day:
-        return True
-    else:
-        return False
 
 def start(attchBoss=False):
     count = 1
-    luckBossCount = 1
     while True:
         checkGameWindow()
         checkIsOutLogin()
         checkIsDead()
         # isBoss_800()
-        if is_past_midnight():
-            luckBossCount = 0
         if count % 30 == 0:
             checkIsError()
             sleep(2)
-        if luckBossCount < 3 and count % 15 == 0 and toLuckyBoss() :
-            luckBossCount = luckBossCount + 1
+        if count % 20 == 0 and toLuckyBoss():
             # 前往挑战
             click(960, 531)
             sleep(240)
