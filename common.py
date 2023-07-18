@@ -6,8 +6,9 @@ import random
 from startgGame import getWindow
 pyautogui.FAILSAFE = False 
 
-time.sleep(2)
-# pyautogui.moveTo(216, 243, 0.5)
+time.sleep(1)
+pyautogui.moveTo(216, 243, 0.5)
+pyautogui.click()
 # pyautogui.click()
 # getWindow('地下城与勇士')
 

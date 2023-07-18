@@ -1,0 +1,86 @@
+from time import sleep
+import common
+import auto
+import autoFindRoad
+import pydirectinput
+
+def nextGame(needSale = False):
+    common.otherKeys('`')
+    common.otherKeys('x')
+    common.otherKeys('x')
+    common.otherKeys('x')
+    common.otherKeys('x')
+    if needSale:
+        sleep(8)
+        common.otherKeys('a')
+        sleep(0.5)
+        common.otherKeys('space')
+        sleep(0.5)
+        common.otherKeys('left')
+        sleep(0.5)
+        common.otherKeys('space')
+        sleep(1)
+    else:
+        sleep(3.5)
+        common.otherKeys('3')
+        sleep(6)
+    common.otherKeys('a')
+    common.otherKeys('space')
+    common.otherKeys('left')
+    common.otherKeys('space') 
+    sleep(2)
+    common.otherKeys('esc')
+    common.otherKeys('R_ctrl')
+    sleep(5)
+
+def start():
+
+    common.otherKeys('y')
+    sleep(0.5)
+    autoFindRoad.findDoorPlus(100)
+    sleep(0.5)
+    common.run(0.1)
+    autoFindRoad.moveRoleToYCenter()
+    common.run(0.3)
+    common.otherKeys('w')
+    sleep(0.3)
+    common.moveFunc('down', 0.1)
+    common.otherKeys('s')
+    common.run(0.3)
+
+    autoFindRoad.findDoorPlus(100)
+    sleep(0.5)
+    autoFindRoad.moveRoleToYCenter()
+    common.run(0.2)
+    common.otherKeys('f')
+    sleep(1.5)
+    common.run(0.7)
+
+    autoFindRoad.findDoorPlus(100)
+    sleep(0.5)
+    autoFindRoad.moveRoleToYCenter()
+    common.run(0.7)
+    common.otherKeys('g')
+    sleep(0.5)
+    common.run(0.1)
+
+    autoFindRoad.findDoorPlus(100)
+    sleep(0.5)
+    autoFindRoad.moveRoleToYCenter()
+    common.run(0.5)
+    common.otherKeys('d')
+    sleep(0.5)
+    common.moveFunc('down', 0.1)
+    common.otherKeys('s')
+    common.run(0.3)
+
+    autoFindRoad.findDoorPlus(100)
+    autoFindRoad.moveRoleToYCenter()
+    common.run(0.5)
+    common.otherKeys('r')
+    sleep(0.5)
+    common.otherKeys('alt')
+    sleep(3)
+    nextGame()
+    start()
+start()

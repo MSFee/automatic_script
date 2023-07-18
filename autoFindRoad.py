@@ -4,8 +4,9 @@ import auto
 import common
 
 #   将角色移动到y轴中间
-def moveRoleToYCenter(speed = 122, cropPosition = [0,0,1067,600]):
+def moveRoleToYCenter(speed = 122, cropPosition = [0,0,450,600]):
     y_distance = auto.getRoleAndMiddle(cropPosition)
+    print(y_distance)
     y_distance = y_distance * (122 / speed)
     y_distance /= 320
     if abs(y_distance) >= 0.02:
@@ -51,7 +52,7 @@ def findDoorPlus(speed = 65, limitLeft = False, limitTop = False):
         if total > 4:
             common.otherKeys('.')
         sleep(1)
-        timeX, timeY = auto.getRoleAndDoor(False, 0, [539, 0, 1067,600])
+        timeX, timeY = auto.getRoleAndDoor()
         if total > 4:
             common.otherKeys('.')
         if timeX is None:
@@ -99,7 +100,7 @@ def findDoorPlus(speed = 65, limitLeft = False, limitTop = False):
             if timeY > 0:
                 common.moveFunc('bottom', timeY)
             else:
-                common.moveFunc('top', abs(timeY) + 0.2)
+                common.moveFunc('top', abs(timeY))
         break
 # 寻找角色位置，将角色位置移动到地图正中间
 def findRolePositionAndMoveCenter(count = 0):

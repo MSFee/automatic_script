@@ -3,6 +3,7 @@ import os
 import startgGame
 import pydirectinput
 import auto
+import datetime
 from time import sleep
 
 def click(x, y):
@@ -49,11 +50,7 @@ def checkISNotNetWork(isNeedLogin=False, is5G=True, count=0):
         startgGame.getWindow("雷霆传说")
         return
     else:
-        print('开始登陆')
-        outGameAndLoginGame()
-        sleep(5)
-        startgGame.getWindow("雷霆传说")
-
+        return
 
 def clickWeChantLogo():
     leftPostion = 1931
@@ -102,26 +99,79 @@ def outGameAndLoginGame():
 def checkGameisError():
     auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
     x, y = auto.getImg1AndImg2(
-            "./chuanqi/main.jpg", "./chuanqi/errorImg/1.jpg")
+            "./chuanqi/main.jpg", "./chuanqi/errorImg/1.jpg", 0.8)
     x1, y1 = auto.getImg1AndImg2(
-            "./chuanqi/main.jpg", "./chuanqi/errorImg/2.jpg")
+            "./chuanqi/main.jpg", "./chuanqi/errorImg/2.jpg", 0.8)
     x2, y2 = auto.getImg1AndImg2(
-            "./chuanqi/main.jpg", "./chuanqi/errorImg/3.jpg")
+            "./chuanqi/main.jpg", "./chuanqi/errorImg/3.jpg", 0.8)
     if x != 0 :
         click(x, y)
         sleep(1)
         click(x, y)
         sleep(1)
-        checkISNotNetWork()
+        checkISNotNetWork(True)
     elif x1 != 0 :
         click(x1, y1)
         sleep(1)
         click(x1, y1)
         sleep(1)
-        checkISNotNetWork()
+        checkISNotNetWork(True)
     elif x2 != 0 :
         click(x2, y2)   
         sleep(1) 
         click(x2, y2)   
         sleep(1) 
-        checkISNotNetWork()
+        checkISNotNetWork(True)
+
+# 自动截图并发送微信
+def autoScreensHot(isFull=False):
+    pydirectinput.keyDown('alt')
+    pydirectinput.press('a')
+    pydirectinput.keyUp('alt')
+    sleep(1)
+    if not isFull:
+        pydirectinput.click(500, 400)
+        sleep(1)
+        pydirectinput.click(1333, 847)
+        sleep(1)
+    else:
+        pydirectinput.click(900, 1115)
+        sleep(1)
+        pydirectinput.click(2511, 1412)
+        sleep(1)
+    pydirectinput.click(40, 1370)
+    sleep(1)
+    pydirectinput.keyDown('ctrl')
+    pydirectinput.press('v')
+    pydirectinput.keyUp('ctrl')
+    sleep(1)
+    pydirectinput.press('enter')
+    sleep(1)
+
+def desert_treasure():
+    target_time = datetime.datetime.now().replace(hour=13, minute=0, second=0, microsecond=0)
+    delta = (target_time - datetime.datetime.now()).total_seconds()
+    if delta >= 300 or delta < 0:  # 300秒等于5分钟，如果还没到13:00，则等待
+        return False
+    sleep(1)
+    click(631, 683)
+    count = 0
+    autoScreensHot()
+    while count < 32:
+        count += 1
+        auto.saveAndCropFunc("./chuanqi/main", [0, 0, 1391, 818])
+        sleep(0.5)
+        go_to_img_x, go_to_img_y = auto.getImg1AndImg2(
+            "./chuanqi/main.jpg", "./chuanqi/go_to.jpg", 0.8)
+        if go_to_img_x != 0:
+            autoScreensHot()
+            click(go_to_img_x, go_to_img_y + 9)
+            sleep(1)
+            click(177, 244)
+            sleep(1)
+            click(1258, 362)
+            sleep(15 * 60)
+            autoScreensHot()
+            break
+        sleep(10)
+    return True

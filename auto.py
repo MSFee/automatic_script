@@ -14,7 +14,7 @@ def getImgInfo(img_address):
     template_size= template.shape[:2]
     return template, template_size
 
-template,template_size = getImgInfo('./pic/role2.jpg')
+template,template_size = getImgInfo('./pic/role.jpg')
 roleLeft,roleLeft_size = getImgInfo('./pic/role-left.jpg')
 roleRight,roleRight_size = getImgInfo('./pic/role-right.jpg')
 
