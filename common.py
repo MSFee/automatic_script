@@ -3,7 +3,6 @@ import pyautogui
 import pydirectinput
 import time
 import random
-from startgGame import getWindow
 pyautogui.FAILSAFE = False 
 
 time.sleep(1)

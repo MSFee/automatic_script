@@ -1,11 +1,12 @@
 from sys import flags
 from time import sleep
 import cv2
-from PIL import ImageGrab
+from startgGame import getWindow
+from PIL import ImageGrab, Image
 import numpy as np
 scale = 1
-
-CROPPOSITION = [0,0,1067,600]
+h, w, h = getWindow()
+CROPPOSITION = [0,0,w,h]
 
 
 def getImgInfo(img_address):
@@ -17,11 +18,13 @@ def getImgInfo(img_address):
 template,template_size = getImgInfo('./pic/role.jpg')
 roleLeft,roleLeft_size = getImgInfo('./pic/role-left.jpg')
 roleRight,roleRight_size = getImgInfo('./pic/role-right.jpg')
+roleMain,roleMain_size = getImgInfo('./pic/role2.jpg')
 
 
 
 door,door_size = getImgInfo('./pic/door.jpg')
 close_door,close_door_size = getImgInfo('./pic/close_door.jpg')
+close_door2,close_door_size2 = getImgInfo('./pic/door2.jpg')
 taskDoor,taskDoor_size = getImgInfo('./pic/emergency_door.jpg')
 
 # 根据图片地址判断两张图片的位置
@@ -67,8 +70,10 @@ def getRoleAndDoor(isTaskDoor = False, flag = 0, cropPosition = CROPPOSITION):
             img_,x_,y_ = search_returnPoint(img,roleRight,roleRight_size)
         elif flag == 2:
             img_,x_,y_ = search_returnPoint(img,roleLeft,roleLeft_size)
-        else:
+        elif flag == 3:
             img_,x_,y_ = search_returnPoint(img,template,template_size)
+        else:
+            img_,x_,y_ = search_returnPoint(img,roleMain,roleMain_size)
         if x_ is None:
             if flag == 0:
                return getRoleAndDoor(isTaskDoor, 1, cropPosition)
@@ -116,9 +121,16 @@ def getRoleAndMiddle(cropPosition = [0,0,800,600]):
     img,img_size = getImgInfo('./dnf.jpg')
     img_,x,y = search_returnPoint(img,template,template_size)
     img_2,x_2,y_2 = search_returnPoint(img,close_door,close_door_size)
+    img_3,x_3,y_3 = search_returnPoint(img,close_door2,close_door_size2)
+    print(y_2, y_3)
     if y is None:
         return 0
-    if y_2 is None:
+    if y_2 is None and y_3 is None:
+        return 0
+    if y_2 is None and y_3 != None:
+        y_2 = y_3
+    if y_2 < 250:
+        print(y_2)
         return 0
     y_2 += 20
     y += 173 # 称号到角色脚的距离
@@ -169,3 +181,24 @@ def checkHasMachine():
         return False
     else:
         return True
+# 判断当前截图是否是黑图（网路延迟等原因可能导致过图时间边长）
+def checkImgIsBlack():
+    saveAndCropFunc('dnf');
+    img = Image.open(r'./dnf.jpg')
+    # 计算平均灰度值
+    gray_sum = 0
+    count = 0
+    for x in range(img.width):
+        for y in range(img.height):
+            if img.mode == "RGB":
+                r, g, b = img.getpixel((x, y))
+                gray_sum += (r + g + b) / 3
+            elif img.mode == "L":
+                gray_value = img.getpixel((x, y))
+                gray_sum += gray_value
+            count += 1
+ 
+    avg_gray = gray_sum / count
+    if avg_gray < 10:
+        return True
+    return False

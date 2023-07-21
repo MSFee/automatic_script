@@ -6,7 +6,6 @@ import common
 #   将角色移动到y轴中间
 def moveRoleToYCenter(speed = 122, cropPosition = [0,0,450,600]):
     y_distance = auto.getRoleAndMiddle(cropPosition)
-    print(y_distance)
     y_distance = y_distance * (122 / speed)
     y_distance /= 320
     if abs(y_distance) >= 0.02:
@@ -14,39 +13,7 @@ def moveRoleToYCenter(speed = 122, cropPosition = [0,0,450,600]):
             common.moveFunc('top', abs(y_distance))
         else:
             common.moveFunc('bottom', abs(y_distance))
-
-def findDoor(speed = 65, isNeedColumn = True, isNeedToLeft = True, isTaskDoor = False, cropPosition = auto.CROPPOSITION):
-    total = 1
-    flag = False
-    while total <= 10:
-        sleep(1)
-        timeX, timeY = auto.getRoleAndDoor(isTaskDoor, 0, cropPosition)
-        if timeX is False:
-            common.ranDomMoveRole() 
-            total += 1
-        if timeX is None:
-            common.moveFunc('right', 0.2) 
-            total += 1
-            continue
-        if abs(timeX) > 0.1:
-            timeX = (65 / speed) * timeX
-            if timeX < 0 and isNeedToLeft is False:
-                common.moveFunc('right', 1)
-                continue
-            if timeX > 0:
-                common.moveFunc('right', timeX)
-            else:
-                common.moveFunc('left', abs(timeX))
-        if isNeedColumn is False:
-            return
-        if abs(timeY) > 0.1:
-            # timeY = (65 / speed) * timeY
-            if timeY > 0:
-                common.moveFunc('bottom', timeY)
-            else:
-                common.moveFunc('top', abs(timeY) )
-        break
-def findDoorPlus(speed = 65, limitLeft = False, limitTop = False):
+def findDoorPlus(speed = 100, limitLeft = False, limitTop = False):
     total = 1
     while total <= 10:
         if total > 4:
@@ -67,7 +34,6 @@ def findDoorPlus(speed = 65, limitLeft = False, limitTop = False):
                 common.moveFunc('right', 0.2)
             else:
                 common.moveFunc('left', 0.2) 
-            # findRolePositionAndMoveCenter()
             total -= 1
             continue
         if limitTop is True:
@@ -125,45 +91,6 @@ def findRolePositionAndMoveCenter(count = 0):
         flag = False
     if flag == False:
         findRolePositionAndMoveCenter(count + 1)
-# 自动寻找紧急任务门
-def findTaskDoor(speed = 65):
-    common.otherKeys('.')
-    x,y = auto.checkHasTask()
-    if x == 0:
-        findRolePositionAndMoveCenter()
-    flag = False
-    while x == 0:
-        x,y = auto.checkHasTask()
-        if flag is False:
-            common.run(0.5, 'left')
-            x,y = auto.checkHasTask()
-            if x != 0:
-                break
-            common.run(0.5, 'left')
-            x,y = auto.checkHasTask()
-            if x != 0:
-                break
-            common.run(0.5, 'left')
-            x,y = auto.checkHasTask()
-            if x != 0:
-                break
-            flag = True
-        else:
-            common.run(0.5, 'right')
-            x,y = auto.checkHasTask()
-            if x != 0:
-                break
-            common.run(0.5, 'right')
-            x,y = auto.checkHasTask()
-            if x != 0:
-                break
-            common.run(0.5, 'right')
-            x,y = auto.checkHasTask()
-            if x != 0:
-                break
-            flag = False
-    findDoor(speed, True, True, True)
-    common.otherKeys('.')
 
 # 判断当前疲劳值是否清空
 def checkFatigueValueisClear():
