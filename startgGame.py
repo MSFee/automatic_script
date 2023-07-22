@@ -5,6 +5,24 @@ import win32api
 import auto
 
 import win32con
+# def getWeGaqmeWindow(windowName = '', windowClassName = None):
+#     hwnd = win32gui.FindWindow("WeGame")
+#     # 根据窗口句柄获取窗口的设备上下文DC（Divice Context）
+#     # hwndDC = win32gui.GetWindowDC(hwnd)
+#     win32gui.SetForegroundWindow(hwnd)
+#     # # 根据窗口的DC获取mfcDC
+#     # mfcDC = win32ui.CreateDCFromHandle(hwndDC)
+#     # # mfcDC创建可兼容的DC
+#     # saveDC = mfcDC.CreateCompatibleDC()
+#     # # 创建bigmap准备保存图片
+#     # saveBitMap = win32ui.CreateBitmap()
+#     #     # 获取监控器信息
+#     left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+#     width = right - left
+#     height = bottom- top
+#     if left != 0 or top != 0:
+#         win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, 0, 0, width, height, win32con.SWP_SHOWWINDOW)
+#     return hwnd, width, height    
 def getWindow(windowName = '', windowClassName = None):
     hwnd = win32gui.FindWindow("地下城与勇士", "地下城与勇士：创新世纪")
     # 根据窗口句柄获取窗口的设备上下文DC（Divice Context）

@@ -6,9 +6,8 @@ import random
 pyautogui.FAILSAFE = False 
 
 time.sleep(1)
-pyautogui.moveTo(216, 243, 0.5)
-pyautogui.click()
-# pyautogui.click()
+pyautogui.moveTo(546, 241, 0.1)
+pydirectinput.click()
 # getWindow('地下城与勇士')
 
 def moveFunc(direction, times = 0): 

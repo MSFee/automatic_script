@@ -4,10 +4,12 @@ import cv2
 from startgGame import getWindow
 from PIL import ImageGrab, Image
 import numpy as np
+import win32api
 scale = 1
-h, w, h = getWindow()
+hwnd, w, h = getWindow()
 CROPPOSITION = [0,0,w,h]
-
+def getHwnd():
+    return hwnd
 
 def getImgInfo(img_address):
     template = cv2.imread(img_address)
@@ -27,6 +29,8 @@ close_door,close_door_size = getImgInfo('./pic/close_door.jpg')
 close_door2,close_door_size2 = getImgInfo('./pic/door2.jpg')
 taskDoor,taskDoor_size = getImgInfo('./pic/emergency_door.jpg')
 
+start_btn,start_btn_size = getImgInfo('./others_pic/startGame.jpg')
+game_space,game_space_size = getImgInfo('./others_pic/gameSpace.jpg')
 # 根据图片地址判断两张图片的位置
 def getImg1AndImg2(address1, address2, threshold = 0.6):
     addressImg1,addressImg1_size = getImgInfo(address1)
@@ -35,7 +39,6 @@ def getImg1AndImg2(address1, address2, threshold = 0.6):
     if x is None:
         return 0, 0
     return x, y
-
 
 # 截图方法
 def saveAndCropFunc(address = 'dnf', cropPosition = CROPPOSITION):
@@ -61,7 +64,7 @@ def search_returnPoint(img,template,template_size, threshold = 0.6):
         return None,None,None
     return img,point[0]+ template_size[1] /2,point[1]
 
-def getRoleAndDoor(isTaskDoor = False, flag = 0, cropPosition = CROPPOSITION):
+def getRoleAndDoor(flag = 0, cropPosition = CROPPOSITION):
     saveAndCropFunc('dnf', cropPosition)
     img = cv2.imread('./dnf.jpg')
     img = cv2.resize(img,(0,0),fx=scale,fy=scale)
@@ -76,15 +79,14 @@ def getRoleAndDoor(isTaskDoor = False, flag = 0, cropPosition = CROPPOSITION):
             img_,x_,y_ = search_returnPoint(img,roleMain,roleMain_size)
         if x_ is None:
             if flag == 0:
-               return getRoleAndDoor(isTaskDoor, 1, cropPosition)
+               return getRoleAndDoor(1, cropPosition)
             elif flag == 1:
-               return getRoleAndDoor(isTaskDoor, 2, cropPosition)
+               return getRoleAndDoor(2, cropPosition)
+            elif flag == 2:
+                return  getRoleAndDoor(3, cropPosition)
             else:
                 return False, False
-        if isTaskDoor is True:
-            door_,door_x,door_y = search_returnPoint(img,taskDoor,taskDoor_size)
-        else:
-            door_,door_x,door_y = search_returnPoint(img,door,door_size)
+        door_,door_x,door_y = search_returnPoint(img,door,door_size)
         x_distance = door_x - x_
         y_distance = door_y - y_ - 150
         return x_distance / 200, y_distance / 200
@@ -122,7 +124,6 @@ def getRoleAndMiddle(cropPosition = [0,0,800,600]):
     img_,x,y = search_returnPoint(img,template,template_size)
     img_2,x_2,y_2 = search_returnPoint(img,close_door,close_door_size)
     img_3,x_3,y_3 = search_returnPoint(img,close_door2,close_door_size2)
-    print(y_2, y_3)
     if y is None:
         return 0
     if y_2 is None and y_3 is None:
@@ -130,7 +131,6 @@ def getRoleAndMiddle(cropPosition = [0,0,800,600]):
     if y_2 is None and y_3 != None:
         y_2 = y_3
     if y_2 < 250:
-        print(y_2)
         return 0
     y_2 += 20
     y += 173 # 称号到角色脚的距离
@@ -200,5 +200,21 @@ def checkImgIsBlack():
  
     avg_gray = gray_sum / count
     if avg_gray < 10:
+        return True
+    return False
+
+def findWegameStarGameBtn():
+    saveAndCropFunc('dnf', [0, 0, win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)])
+    img = cv2.imread('./dnf.jpg')
+    img = cv2.resize(img,(0,0),fx=scale,fy=scale)
+    img_,x_,y_ = search_returnPoint(img,start_btn,start_btn_size)
+    return int(x_), int(y_)
+
+def findGameSpace():
+    saveAndCropFunc('dnf', [0, 0, win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)])
+    img = cv2.imread('./dnf.jpg')
+    img = cv2.resize(img,(0,0),fx=scale,fy=scale)
+    img_,x_,y_ = search_returnPoint(img,game_space,game_space_size)
+    if x_ != None:
         return True
     return False

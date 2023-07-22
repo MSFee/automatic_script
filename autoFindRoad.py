@@ -13,54 +13,17 @@ def moveRoleToYCenter(speed = 122, cropPosition = [0,0,450,600]):
             common.moveFunc('top', abs(y_distance))
         else:
             common.moveFunc('bottom', abs(y_distance))
-def findDoorPlus(speed = 100, limitLeft = False, limitTop = False):
+def findDoorPlus(speed = 100):
+    sleep(0.5)
     total = 1
     while total <= 10:
-        if total > 4:
-            common.otherKeys('.')
-        sleep(1)
         timeX, timeY = auto.getRoleAndDoor()
-        if total > 4:
-            common.otherKeys('.')
-        if timeX is None:
-            if limitLeft is True:
-                common.moveFunc('left', 0.2)
-            else:
-                common.moveFunc('right', 0.2) 
+        if timeX is None or timeX is False or timeX < 0:
+            common.moveFunc('right', 0.2) 
             total += 1
             continue
-        if timeX is False:
-            if limitLeft is True:
-                common.moveFunc('right', 0.2)
-            else:
-                common.moveFunc('left', 0.2) 
-            total -= 1
-            continue
-        if limitTop is True:
-            if abs(timeY) < 0.4:
-                if timeX > 0:
-                    common.moveFunc('left', 0.3)
-                else:
-                    common.moveFunc('right', 0.3)
-                continue
-            else:
-                if abs(timeX) > 1:
-                    common.moveFunc('right', 0.3)
-                    continue
-        if abs(timeX) > 0.1:
-            timeX = (65 / speed) * timeX
-            # 只往右走
-            # if timeX < 0:
-            #     common.moveFunc('right', 1)
-            #     continue
-            if timeX > 0:
-                if limitLeft is True and abs(timeY) < 0.2:
-                    common.moveFunc('left', 1)
-                    continue
-                else:
-                    common.moveFunc('right', timeX)
-            else:
-                common.moveFunc('left', abs(timeX))
+        timeX = (65 / speed) * timeX
+        common.moveFunc('right', timeX)
         if abs(timeY) > 0.1:
             timeY = (65 / speed) * timeY
             if timeY > 0:
@@ -92,8 +55,8 @@ def findRolePositionAndMoveCenter(count = 0):
     if flag == False:
         findRolePositionAndMoveCenter(count + 1)
 
-# 判断当前疲劳值是否清空
-def checkFatigueValueisClear():
+# 判断当前疲劳值是否清空 或者判断当前是否打死BOSS准备重新进入地图
+def checkFatigueValueisClear(num):
     auto.saveAndCropFunc()
     img,img_size = auto.getImgInfo('./dnf.jpg')
     over,over_size = auto.getImgInfo('./others_pic/over.jpg')
@@ -103,7 +66,7 @@ def checkFatigueValueisClear():
         common.otherKeys('esc')
         auto.saveAndCropFunc()
         img,img_size = auto.getImgInfo('./dnf.jpg')
-    curr, x, y = auto.search_returnPoint(img,over,over_size, 0.9)
+    curr, x, y = auto.search_returnPoint(img,over,over_size, num)
     if x is None:
         return False
     else:
