@@ -31,6 +31,8 @@ taskDoor,taskDoor_size = getImgInfo('./pic/emergency_door.jpg')
 
 start_btn,start_btn_size = getImgInfo('./others_pic/startGame.jpg')
 game_space,game_space_size = getImgInfo('./others_pic/gameSpace.jpg')
+
+
 # 根据图片地址判断两张图片的位置
 def getImg1AndImg2(address1, address2, threshold = 0.6):
     addressImg1,addressImg1_size = getImgInfo(address1)
@@ -130,7 +132,7 @@ def getRoleAndMiddle(cropPosition = [0,0,800,600]):
         return 0
     if y_2 is None and y_3 != None:
         y_2 = y_3
-    if y_2 < 250:
+    if y_2 < 300:
         return 0
     y_2 += 20
     y += 173 # 称号到角色脚的距离

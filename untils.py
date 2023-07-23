@@ -5,6 +5,7 @@ import auto
 import common
 from startgGame import closeWindow, getWindow
 import pydirectinput
+import otherUntils
 
 
 def getCurrSmallMap(callback1, callback2, callback3, callback4, callback5, callback6, callback7, callback8, callback9):
@@ -70,10 +71,15 @@ def getCurrSmallMap(callback1, callback2, callback3, callback4, callback5, callb
                     callback5, callback6, callback7, callback8, callback9)
 
 
-def loginGame(isNextRole=False):
+def loginGame(isNextRole = False, isNeedLogin = True, isNeedSleepOneHour = False):
     print('退出游戏')
     hwnd, h, w = getWindow()
     closeWindow(hwnd)
+    if isNeedLogin is False:
+        return
+    if isNeedSleepOneHour is True:
+        sleep(1000 * 60)
+        otherUntils.checkISNotNetWork()
     sleep(10)
     x, y = auto.findWegameStarGameBtn()
     pydirectinput.click(x, y)
@@ -101,37 +107,42 @@ def checkIsClear():
     if autoFindRoad.checkFatigueValueisClear(0.8):
         return True
     return False
-def nextGame(needSale=False):
+def nextGame(isNeedSleepOneHour = False):
     common.otherKeys('`')
     common.otherKeys('x')
     common.otherKeys('x')
     common.otherKeys('x')
     common.otherKeys('x')
-    if needSale:
-        sleep(8)
-        common.otherKeys('a')
-        sleep(0.5)
-        common.otherKeys('space')
-        sleep(0.5)
-        common.otherKeys('left')
-        sleep(0.5)
-        common.otherKeys('space')
-        sleep(1)
-    else:
-        sleep(3.5)
-        common.otherKeys('3')
-        sleep(6)
+    sleep(3.5)
+    common.otherKeys('3')
+    sleep(6)
     common.otherKeys('a')
     common.otherKeys('space')
     common.otherKeys('left')
     common.otherKeys('space')
     sleep(2)
     common.otherKeys('esc')
+    if otherUntils.check_network_status() is False:
+        otherUntils.checkISNotNetWork()
+        loginGame()
+        return False, 0
     if autoFindRoad.checkFatigueValueisClear(0.8) is False: # 未符合预期
+        otherUntils.autoScreensHot(True)
         loginGame()
         return False, 0
 
     if checkIsClear(): # 疲劳值清空
-        loginGame(True)
+        otherUntils.autoScreensHot(True)
+        loginGame(True, True, isNeedSleepOneHour)
         return False, 1
     return True, 0
+
+# 判断刚进入地图，是否命中安全模式
+def checkisSafe():
+   common.otherKeys('z')
+   sleep(1)
+   auto.saveAndCropFunc()
+   x, y = auto.getImg1AndImg2('./dnf.jpg', './others_pic/60s_safe.jpg')
+   if x != 0:
+       common.otherKeys('esc')
+   sleep(0.5)

@@ -34,22 +34,14 @@ def connect_wifi(is5G=True):
         os.system('netsh wlan connect name="{}"'.format('mr1002'))
 
 # 检查电脑网络链接
-def checkISNotNetWork(isNeedLogin=False, is5G=True, count=0):
+def checkISNotNetWork(is5G=True, count=0):
     if not check_network_status():
         if count > 10:
             sleep(300)
         connect_wifi(is5G)
         sleep(10)
         is5G = not is5G
-        checkISNotNetWork(True, is5G, count + 1)
-        return
-    elif isNeedLogin:
-        print('开始登陆')
-        outGameAndLoginGame()
-        sleep(5)
-        startgGame.getWindow("雷霆传说")
-        return
-    else:
+        checkISNotNetWork(is5G, count + 1)
         return
 
 def clickWeChantLogo():
@@ -99,6 +91,7 @@ def outGameAndLoginGame():
 
 # 自动截图并发送微信
 def autoScreensHot(isFull=False):
+    pydirectinput.click(40, 1370)
     pydirectinput.keyDown('alt')
     pydirectinput.press('a')
     pydirectinput.keyUp('alt')
@@ -121,3 +114,4 @@ def autoScreensHot(isFull=False):
     sleep(1)
     pydirectinput.press('enter')
     sleep(1)
+    pydirectinput.click(161, 120)
