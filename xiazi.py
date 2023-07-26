@@ -45,7 +45,7 @@ def start():
     common.run(0.5)
 
     autoFindRoad.findDoorPlus(100)
-    common.run(0.5)
+    common.run(0.4)
     autoFindRoad.moveRoleToYCenter()
     common.otherKeys('s')
     sleep(0.5)

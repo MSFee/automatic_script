@@ -5,6 +5,7 @@ import pydirectinput
 import auto
 import datetime
 from time import sleep
+import os
 
 def click(x, y):
     if x != 0:
@@ -57,7 +58,7 @@ def clickWeChantLogo():
         pydirectinput.click(2327, 1414)
 
 
-def outGameAndLoginGame():
+def outGameAndlogoutGame():
     sleep(2)
     click(690, 481)
     sleep(2)
@@ -90,23 +91,17 @@ def outGameAndLoginGame():
 
 
 # 自动截图并发送微信
-def autoScreensHot(isFull=False):
-    pydirectinput.click(40, 1370)
+def autoScreensHot():
+    pydirectinput.click(40, 1300)
     pydirectinput.keyDown('alt')
     pydirectinput.press('a')
     pydirectinput.keyUp('alt')
     sleep(1)
-    if not isFull:
-        pydirectinput.click(500, 400)
-        sleep(1)
-        pydirectinput.click(1333, 847)
-        sleep(1)
-    else:
-        pydirectinput.click(900, 1115)
-        sleep(1)
-        pydirectinput.click(2511, 1412)
-        sleep(1)
-    pydirectinput.click(40, 1370)
+    pydirectinput.click(900, 1115)
+    sleep(1)
+    pydirectinput.click(2511, 1412)
+    sleep(1)
+    pydirectinput.click(72, 1359)
     sleep(1)
     pydirectinput.keyDown('ctrl')
     pydirectinput.press('v')
@@ -115,3 +110,9 @@ def autoScreensHot(isFull=False):
     pydirectinput.press('enter')
     sleep(1)
     pydirectinput.click(161, 120)
+
+# 关机
+def shutdown():
+    print("电脑即将关机")
+    sleep(10)
+    os.system("shutdown /s /t 0")

@@ -1,15 +1,15 @@
 from sys import flags
 from time import sleep
 import cv2
-from startgGame import getWindow
+from startgGame import getWindow, getWindowAndSetMoveBottom
 from PIL import ImageGrab, Image
 import numpy as np
 import win32api
 scale = 1
+getWindowAndSetMoveBottom("文件传输助手")
 hwnd, w, h = getWindow()
 CROPPOSITION = [0,0,w,h]
-def getHwnd():
-    return hwnd
+
 
 def getImgInfo(img_address):
     template = cv2.imread(img_address)
@@ -27,6 +27,7 @@ roleMain,roleMain_size = getImgInfo('./pic/role2.jpg')
 door,door_size = getImgInfo('./pic/door.jpg')
 close_door,close_door_size = getImgInfo('./pic/close_door.jpg')
 close_door2,close_door_size2 = getImgInfo('./pic/door2.jpg')
+close_door3,close_door_size3 = getImgInfo('./pic/door3.jpg')
 taskDoor,taskDoor_size = getImgInfo('./pic/emergency_door.jpg')
 
 start_btn,start_btn_size = getImgInfo('./others_pic/startGame.jpg')
@@ -126,12 +127,15 @@ def getRoleAndMiddle(cropPosition = [0,0,800,600]):
     img_,x,y = search_returnPoint(img,template,template_size)
     img_2,x_2,y_2 = search_returnPoint(img,close_door,close_door_size)
     img_3,x_3,y_3 = search_returnPoint(img,close_door2,close_door_size2)
+    img_3,x_3,y_4 = search_returnPoint(img,close_door3,close_door_size2)
     if y is None:
         return 0
-    if y_2 is None and y_3 is None:
+    if y_2 is None and y_3 is None and y_4 is None:
         return 0
     if y_2 is None and y_3 != None:
         y_2 = y_3
+    if y_2 is None and y_4 != None:
+        y_2 = y_4
     if y_2 < 300:
         return 0
     y_2 += 20

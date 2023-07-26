@@ -10,6 +10,11 @@ pyautogui.moveTo(546, 241, 0.1)
 pydirectinput.click()
 # getWindow('地下城与勇士')
 
+def clickPosition(x, y):
+    pyautogui.moveTo(int(x), int(y), 0.1)
+    pydirectinput.mouseDown(button='left')
+    pydirectinput.mouseUp(button='left')
+
 def moveFunc(direction, times = 0): 
     if direction == 'right':
         pydirectinput.keyDown('right')

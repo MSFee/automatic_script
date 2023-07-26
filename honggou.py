@@ -10,6 +10,7 @@ def start():
     sleep(0.5)
     autoFindRoad.findDoorPlus(100)
     sleep(0.5)
+    autoFindRoad.moveRoleToYCenter()
     common.run(0.5)
     common.otherKeys('h')
     sleep(0.5)

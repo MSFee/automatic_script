@@ -70,26 +70,7 @@ def getCurrSmallMap(callback1, callback2, callback3, callback4, callback5, callb
     getCurrSmallMap(callback1, callback2, callback3, callback4,
                     callback5, callback6, callback7, callback8, callback9)
 
-
-def loginGame(isNextRole = False, isNeedLogin = True, isNeedSleepOneHour = False):
-    print('退出游戏')
-    hwnd, h, w = getWindow()
-    closeWindow(hwnd)
-    if isNeedLogin is False:
-        return
-    if isNeedSleepOneHour is True:
-        sleep(1000 * 60)
-        otherUntils.checkISNotNetWork()
-    sleep(10)
-    x, y = auto.findWegameStarGameBtn()
-    pydirectinput.click(x, y)
-    while auto.findGameSpace() is False:
-        sleep(5)
-    pyautogui.moveTo(546, 241, 0.1)
-    pydirectinput.click()
-    if isNextRole:
-        common.otherKeys('right')
-        sleep(0.5)
+def goToMonster():
     common.otherKeys('space')
     sleep(5)
     common.moveFunc('right', 3)
@@ -100,6 +81,37 @@ def loginGame(isNextRole = False, isNeedLogin = True, isNeedSleepOneHour = False
     sleep(0.5)
     common.otherKeys('space')
 
+def findStartGameBtn():
+    while auto.findGameSpace() is False:
+        sleep(5)
+def changeRole():
+    common.otherKeys('esc')
+    auto.saveAndCropFunc()
+    x, y = auto.getImg1AndImg2('./dnf.jpg', './others_pic/choise_role.jpg')
+    sleep(2)
+    common.clickPosition(x, y)
+    findStartGameBtn()
+    common.otherKeys('right')
+    sleep(3)
+    goToMonster()
+
+def startGame():
+    print("开始登陆游戏")
+    x, y = auto.findWegameStarGameBtn()
+    pydirectinput.click(x, y)
+    findStartGameBtn()
+    pyautogui.moveTo(546, 241, 0.1)
+    pydirectinput.click()
+    goToMonster()
+
+def logoutGame():
+    print('退出游戏')
+    hwnd, h, w = getWindow()
+    closeWindow(hwnd)
+    sleep(10)
+    startGame()
+
+
 
 def checkIsClear():
     common.otherKeys('R_ctrl')
@@ -107,7 +119,7 @@ def checkIsClear():
     if autoFindRoad.checkFatigueValueisClear(0.8):
         return True
     return False
-def nextGame(isNeedSleepOneHour = False):
+def nextGame():
     common.otherKeys('`')
     common.otherKeys('x')
     common.otherKeys('x')
@@ -124,16 +136,18 @@ def nextGame(isNeedSleepOneHour = False):
     common.otherKeys('esc')
     if otherUntils.check_network_status() is False:
         otherUntils.checkISNotNetWork()
-        loginGame()
+        logoutGame()
         return False, 0
     if autoFindRoad.checkFatigueValueisClear(0.8) is False: # 未符合预期
-        otherUntils.autoScreensHot(True)
-        loginGame()
+        otherUntils.autoScreensHot()
+        logoutGame()
         return False, 0
 
     if checkIsClear(): # 疲劳值清空
-        otherUntils.autoScreensHot(True)
-        loginGame(True, True, isNeedSleepOneHour)
+        otherUntils.autoScreensHot()
+        common.otherKeys('shiftright')
+        sleep(5)
+        changeRole()
         return False, 1
     return True, 0
 
