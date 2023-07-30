@@ -6,7 +6,7 @@ import common
 from startgGame import closeWindow, getWindow
 import pydirectinput
 import otherUntils
-
+import datetime
 
 def getCurrSmallMap(callback1, callback2, callback3, callback4, callback5, callback6, callback7, callback8, callback9):
     auto.saveAndCropFunc('small_map', [737, 47, 794, 139])
@@ -70,21 +70,39 @@ def getCurrSmallMap(callback1, callback2, callback3, callback4, callback5, callb
     getCurrSmallMap(callback1, callback2, callback3, callback4,
                     callback5, callback6, callback7, callback8, callback9)
 
-def goToMonster():
+# 判断刚进入游戏，赛利亚房间，是否有弹窗
+def checkHasCloseBtn():
+   sleep(1)
+   auto.saveAndCropFunc()
+   x, y = auto.getImg1AndImg2('./dnf.jpg', './others_pic/close_btn.jpg')
+   if x != 0:
+    common.clickPosition(x, y)
+    sleep(3)
+
+
+def goToMonster(needUp = True):
     common.otherKeys('space')
     sleep(5)
+    checkHasCloseBtn()
     common.moveFunc('right', 3)
     common.otherKeys('space')
     sleep(3)
     common.moveFunc('right', 5)
-    common.otherKeys('up')
+    sleep(3)
+    if needUp:
+        common.otherKeys('up')
     sleep(0.5)
     common.otherKeys('space')
 
 def findStartGameBtn():
+    count = 0
     while auto.findGameSpace() is False:
+        count += 1
         sleep(5)
+        if count > 50:
+            otherUntils.shutdown()
 def changeRole():
+    checkHasCloseBtn()
     common.otherKeys('esc')
     auto.saveAndCropFunc()
     x, y = auto.getImg1AndImg2('./dnf.jpg', './others_pic/choise_role.jpg')
@@ -93,7 +111,7 @@ def changeRole():
     findStartGameBtn()
     common.otherKeys('right')
     sleep(3)
-    goToMonster()
+    goToMonster(False)
 
 def startGame():
     print("开始登陆游戏")
@@ -160,3 +178,9 @@ def checkisSafe():
    if x != 0:
        common.otherKeys('esc')
    sleep(0.5)
+
+def checkTime():
+    now = datetime.datetime.now()
+    if now.hour >= 2 and now.hour <= 6:
+        return True
+    return False

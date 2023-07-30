@@ -214,6 +214,9 @@ def findWegameStarGameBtn():
     img = cv2.imread('./dnf.jpg')
     img = cv2.resize(img,(0,0),fx=scale,fy=scale)
     img_,x_,y_ = search_returnPoint(img,start_btn,start_btn_size)
+    if x_ is None:
+        sleep(10)
+        x_, y_ = findWegameStarGameBtn()
     return int(x_), int(y_)
 
 def findGameSpace():
