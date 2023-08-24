@@ -72,7 +72,7 @@ def getCurrSmallMap(callback1, callback2, callback3, callback4, callback5, callb
 
 # 判断刚进入游戏，赛利亚房间，是否有弹窗
 def checkHasCloseBtn():
-   sleep(1)
+   sleep(30)
    auto.saveAndCropFunc()
    x, y = auto.getImg1AndImg2('./dnf.jpg', './others_pic/close_btn.jpg')
    if x != 0:
@@ -100,7 +100,14 @@ def findStartGameBtn():
         count += 1
         sleep(5)
         if count > 50:
-            otherUntils.shutdown()
+            x, y = auto.getImg1AndImg2('./dnf.jpg', './others_pic/go_home.jpg')
+            if x and y:
+                common.clickPosition(x, y+20)
+                sleep(5)
+                changeRole()
+            else:
+                otherUntils.chatWithweixin("findStartGameBtn 死循环了")
+                otherUntils.shutdown()
 def changeRole():
     checkHasCloseBtn()
     common.otherKeys('esc')
@@ -114,7 +121,6 @@ def changeRole():
     goToMonster(False)
 
 def startGame():
-    print("开始登陆游戏")
     x, y = auto.findWegameStarGameBtn()
     pydirectinput.click(x, y)
     findStartGameBtn()
@@ -123,7 +129,6 @@ def startGame():
     goToMonster()
 
 def logoutGame():
-    print('退出游戏')
     hwnd, h, w = getWindow()
     closeWindow(hwnd)
     sleep(10)
@@ -181,6 +186,6 @@ def checkisSafe():
 
 def checkTime():
     now = datetime.datetime.now()
-    if now.hour >= 2 and now.hour <= 6:
+    if now.hour >= 13 and now.hour <= 18:
         return True
     return False
